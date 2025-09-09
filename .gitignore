@@ -1,0 +1,14 @@
+*.class
+target/
+build/
+*.jar
+*.war
+*.ear
+.vscode/
+.idea/
+*.iml
+*.log
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
