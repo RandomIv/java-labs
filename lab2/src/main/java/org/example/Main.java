@@ -6,6 +6,6 @@ public class Main {
         String jsonPerson = new Gson().toJson(person);
         System.out.println(jsonPerson);
         Person newPerson = new Gson().fromJson(jsonPerson, Person.class);
-
+        System.out.println(person.equals(newPerson));
     }
 }
