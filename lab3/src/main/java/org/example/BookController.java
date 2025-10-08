@@ -10,9 +10,6 @@ public class BookController {
         this.bookView = bookView;
     }
     public void start() {
-//        bookView.showBooks(bookModel.getBooks(), "INITIAL ARRAY");
-//        bookView.pause();
-
         boolean running = true;
         while (running) {
             bookView.showMenu();
@@ -30,9 +27,8 @@ public class BookController {
                 }
                 default -> bookView.showMessage("Invalid choice!");
             }
-
-//            if (running) bookView.pause();
         }
+        bookView.close();
     }
 
     private void showAllBooks() {

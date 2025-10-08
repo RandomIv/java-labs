@@ -8,6 +8,5 @@ public class Main {
         BookController controller = new BookController(model, view);
 
         controller.start();
-        view.close();
     }
 }

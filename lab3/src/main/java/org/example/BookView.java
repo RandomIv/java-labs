@@ -34,7 +34,7 @@ public class BookView {
 
     public void showBooks(List<Book> books, String title) {
         System.out.println("\n" + "=".repeat(120));
-        System.out.println(String.format("%60s", title));
+        System.out.printf("%60s%n", title);
         System.out.println("=".repeat(120));
 
         if (books.isEmpty()) {
@@ -54,11 +54,6 @@ public class BookView {
     public void showSearchInfo(String type, String value) {
         System.out.println("\nSearching " + type + ": \"" + value + "\"");
     }
-
-//    public void pause() {
-//        System.out.print("\nPress Enter to continue...");
-//        scanner.nextLine();
-//    }
 
     public void close() {
         scanner.close();
