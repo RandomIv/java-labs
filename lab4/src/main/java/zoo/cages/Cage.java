@@ -25,10 +25,9 @@ abstract public class Cage<T extends Animal> {
         animals.add(animal);
     }
     public void removeAnimal(T animal) throws Exception {
-        if (animals.isEmpty()) {
+        if (!animals.remove(animal)) {
             throw new Exception("There is no given animal");
         }
-        animals.remove(animal);
     }
     public List<T> getAnimals() {
         return animals;
