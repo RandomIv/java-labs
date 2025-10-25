@@ -32,7 +32,7 @@ public class BookView {
         }
     }
 
-    public void showBooks(List<Book> books, String title) {
+    public void showBooks(List<String> books, String title) {
         System.out.println("\n" + "=".repeat(120));
         System.out.printf("%60s%n", title);
         System.out.println("=".repeat(120));
