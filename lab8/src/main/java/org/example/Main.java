@@ -7,7 +7,7 @@ import java.util.concurrent.RecursiveTask;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     static class SumTask extends RecursiveTask<Long> {
-        private static final int THRESHOLD = 20; // поріг для розбиття
+        private static final int THRESHOLD = 20;
         private final int[] array;
         private final int start;
         private final int end;
@@ -50,11 +50,13 @@ public class Main {
             array[i] = random.nextInt(101);
         }
 
-        ForkJoinPool pool = new ForkJoinPool();
-        SumTask task = new SumTask(array, 0, size);
+        long result;
+        try (ForkJoinPool pool = new ForkJoinPool()) {
+            SumTask task = new SumTask(array, 0, size);
 
-        long result = pool.invoke(task);
+            result = pool.invoke(task);
+        }
 
-        System.out.println("Сума всіх елементів масиву: " + result);
+        System.out.println("Sum: " + result);
     }
 }
