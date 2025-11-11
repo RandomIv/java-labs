@@ -46,9 +46,11 @@ public class BookModel {
         }
     }
     public List<Book> getBooks() { return books; }
-    public String getRandomAuthor() { return authors[random.nextInt(authors.length)]; }
-    public String getRandomPublisher() { return publishers[random.nextInt(publishers.length)]; }
-    public int getRandomYear() { return 1990 + random.nextInt(34); }
+
+    public void setBooks(List<Book> books) {
+        this.books = new ArrayList<>(books);
+    }
+
     public List<Book> findBooksByAuthor(String author) {
         return books.stream().filter(book -> book.author().equalsIgnoreCase(author)).toList();
     }

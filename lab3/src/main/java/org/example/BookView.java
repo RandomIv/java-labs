@@ -19,12 +19,33 @@ public class BookView {
         System.out.println("3. Find books by publisher");
         System.out.println("4. Find books published after year");
         System.out.println("5. Sort books by publisher");
+        System.out.println("6. Save books to file");
+        System.out.println("7. Load books from file");
         System.out.println("0. Exit");
         System.out.println("========================================");
         System.out.print("Choose option: ");
     }
 
     public int getChoice() {
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public String getFilename(String action) {
+        System.out.print("Enter filename to " + action + " (e.g., books.ser): ");
+        return scanner.nextLine();
+    }
+
+    public String getSearchQuery(String searchType) {
+        System.out.print("Enter " + searchType + " to search for: ");
+        return scanner.nextLine();
+    }
+
+    public int getSearchYear() {
+        System.out.print("Enter year to search after: ");
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
@@ -49,10 +70,6 @@ public class BookView {
 
     public void showMessage(String message) {
         System.out.println(message);
-    }
-
-    public void showSearchInfo(String type, String value) {
-        System.out.println("\nSearching " + type + ": \"" + value + "\"");
     }
 
     public void close() {

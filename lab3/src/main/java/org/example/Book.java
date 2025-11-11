@@ -7,4 +7,4 @@ public record Book(
         int year,
         int pages,
         double price
-) {}
+) implements java.io.Serializable {}
