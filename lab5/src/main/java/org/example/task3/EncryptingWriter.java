@@ -3,17 +3,17 @@ package org.example.task3;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 public class EncryptingWriter extends FilterWriter {
 
     private final int keyCode;
-    private static final Logger logger = Logger.getLogger(EncryptingWriter.class.getName());
+    private static final Logger logger = Logger.getLogger(EncryptingWriter.class);
 
     public EncryptingWriter(Writer out, int keyCode) {
         super(out);
         this.keyCode = keyCode;
-        logger.fine("EncryptingWriter initialized with key code: " + keyCode);
+        logger.debug("EncryptingWriter initialized with key code: " + keyCode);
     }
 
     private int encrypt(int c) {

@@ -1,19 +1,19 @@
 package org.example.task3;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-import java.util.logging.*;
 
 public class Task3 {
 
-    private static final Logger logger = Logger.getLogger(Task3.class.getName());
+    private static final Logger logger = Logger.getLogger(Task3.class);
     private static ResourceBundle bundle;
 
     public static void main(String[] args) {
-        setupLogging();
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose language / Sprache wahlen:\n1 - English\n2 - Deutsch");
@@ -41,10 +41,11 @@ public class Task3 {
         System.out.println(MessageFormat.format(bundle.getString("msg.key"), key, keyCode));
 
         try {
-            logger.fine("Preparing to write original file...");
+            logger.debug("Preparing to write original file...");
+
             try (Writer writer = new FileWriter(originalFile)) {
                 writer.write("This is a test line.\nIt will be encrypted.");
-                logger.config(MessageFormat.format(bundle.getString("log.file_write"), originalFile));
+                logger.info(MessageFormat.format(bundle.getString("log.file_write"), originalFile));
             }
             System.out.println(MessageFormat.format(bundle.getString("msg.original"), originalFile));
             System.out.println(bundle.getString("msg.content") + "\n" + readFile(originalFile) + "\n");
@@ -76,7 +77,7 @@ public class Task3 {
         } catch (IOException e) {
             String errorMsg = MessageFormat.format(bundle.getString("err.io"), e.getMessage());
             System.err.println(errorMsg);
-            logger.log(Level.SEVERE, "Exception occurred", e);
+            logger.error("Exception occurred", e);
         }
     }
 
@@ -89,25 +90,5 @@ public class Task3 {
             }
         }
         return content.toString();
-    }
-
-    private static void setupLogging() {
-        try {
-            LogManager.getLogManager().reset();
-            logger.setLevel(Level.ALL);
-
-            ConsoleHandler ch = new ConsoleHandler();
-            ch.setLevel(Level.INFO);
-            ch.setFormatter(new SimpleFormatter());
-            logger.addHandler(ch);
-
-            FileHandler fh = new FileHandler("program_log.txt", true);
-            fh.setLevel(Level.ALL);
-            fh.setFormatter(new SimpleFormatter());
-            logger.addHandler(fh);
-
-        } catch (IOException e) {
-            System.err.println("Could not setup logger: " + e.getMessage());
-        }
     }
 }
