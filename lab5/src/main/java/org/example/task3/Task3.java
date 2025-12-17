@@ -1,14 +1,36 @@
 package org.example.task3;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Scanner;
+import java.util.logging.*;
 
 public class Task3 {
 
+    private static final Logger logger = Logger.getLogger(Task3.class.getName());
+    private static ResourceBundle bundle;
+
     public static void main(String[] args) {
+        setupLogging();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose language / Sprache wahlen:\n1 - English\n2 - Deutsch");
+        System.out.print("Choice / Wahl: ");
+        String langChoice = scanner.nextLine();
+
+        Locale locale;
+        if (langChoice.equals("2")) {
+            locale = new Locale("de", "DE");
+        } else {
+            locale = new Locale("en", "US");
+        }
+
+        bundle = ResourceBundle.getBundle("location.messages", locale);
+
+        logger.info(bundle.getString("log.start"));
+
         String originalFile = "original.txt";
         String encryptedFile = "encrypted.txt";
         String decryptedFile = "decrypted.txt";
@@ -16,16 +38,18 @@ public class Task3 {
         char key = 'S';
         int keyCode = key;
 
-        System.out.println("Encryption key: " + key + " (code: " + keyCode + ")");
+        System.out.println(MessageFormat.format(bundle.getString("msg.key"), key, keyCode));
 
         try {
+            logger.fine("Preparing to write original file...");
             try (Writer writer = new FileWriter(originalFile)) {
                 writer.write("This is a test line.\nIt will be encrypted.");
+                logger.config(MessageFormat.format(bundle.getString("log.file_write"), originalFile));
             }
-            System.out.println("1. Created original file: " + originalFile);
-            System.out.println("   Content:\n" + readFile(originalFile) + "\n");
+            System.out.println(MessageFormat.format(bundle.getString("msg.original"), originalFile));
+            System.out.println(bundle.getString("msg.content") + "\n" + readFile(originalFile) + "\n");
 
-            System.out.println("2. Encrypting...");
+            System.out.println(bundle.getString("msg.encrypting"));
             try (Reader reader = new FileReader(originalFile);
                  Writer writer = new EncryptingWriter(new FileWriter(encryptedFile), keyCode)) {
                 int c;
@@ -33,10 +57,10 @@ public class Task3 {
                     writer.write(c);
                 }
             }
-            System.out.println("   Created encrypted file: " + encryptedFile);
-            System.out.println("   Content (unreadable):\n" + readFile(encryptedFile) + "\n");
+            System.out.println(MessageFormat.format(bundle.getString("msg.encrypted"), encryptedFile));
+            System.out.println(bundle.getString("msg.content_hidden") + "\n" + readFile(encryptedFile) + "\n");
 
-            System.out.println("3. Decrypting...");
+            System.out.println(bundle.getString("msg.decrypting"));
             try (Reader reader = new DecryptingReader(new FileReader(encryptedFile), keyCode);
                  Writer writer = new FileWriter(decryptedFile)) {
                 int c;
@@ -44,11 +68,15 @@ public class Task3 {
                     writer.write(c);
                 }
             }
-            System.out.println("   Created decrypted file: " + decryptedFile);
-            System.out.println("   Content (should match original):\n" + readFile(decryptedFile) + "\n");
+            System.out.println(MessageFormat.format(bundle.getString("msg.decrypted"), decryptedFile));
+            System.out.println(bundle.getString("msg.content_match") + "\n" + readFile(decryptedFile) + "\n");
+
+            logger.info(bundle.getString("log.finish"));
 
         } catch (IOException e) {
-            System.err.println("I/O error: " + e.getMessage());
+            String errorMsg = MessageFormat.format(bundle.getString("err.io"), e.getMessage());
+            System.err.println(errorMsg);
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
     }
 
@@ -61,5 +89,25 @@ public class Task3 {
             }
         }
         return content.toString();
+    }
+
+    private static void setupLogging() {
+        try {
+            LogManager.getLogManager().reset();
+            logger.setLevel(Level.ALL);
+
+            ConsoleHandler ch = new ConsoleHandler();
+            ch.setLevel(Level.INFO);
+            ch.setFormatter(new SimpleFormatter());
+            logger.addHandler(ch);
+
+            FileHandler fh = new FileHandler("program_log.txt", true);
+            fh.setLevel(Level.ALL);
+            fh.setFormatter(new SimpleFormatter());
+            logger.addHandler(fh);
+
+        } catch (IOException e) {
+            System.err.println("Could not setup logger: " + e.getMessage());
+        }
     }
 }
